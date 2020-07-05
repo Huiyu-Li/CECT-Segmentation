@@ -35,6 +35,6 @@ The file of 'unet2D' contains 2D Unet model
 The file of 'unet3D' contains 3D Unet model
 
 ##  References
-[1] 1.1	2019_Domain Randomization for Macromolecule Structure Classification and Segmentation in Electron Cyro-tomograms_BIBM_b
+[1]  2019_Domain Randomization for Macromolecule Structure Classification and Segmentation in Electron Cyro-tomograms_BIBM_b
 
 [3]https://github.com/milesial/Pytorch-UNet
