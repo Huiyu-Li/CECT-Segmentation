@@ -1,26 +1,28 @@
 import os
+import pandas as pd
 import torch
 import torch.utils.data as data
 import mrcfile as mrc
 import numpy as np
 
 class CustomDataset(data.Dataset):
-    def __init__(self, root_dir):
-        self.image_dir = "./data/subtomogram_mrc/"
-        self.mask_dir = "./data/densitymap_mrc/"
-        self.image_list = sorted(os.listdir(self.image_dir))
+    def __init__(self, dir_csv):
+        self.image_dirs = pd.read_csv(dir_csv,header=None).iloc[:, :].values#from DataFrame to array
 
     def __len__(self):
-        return len(self.image_list)
+        return len(self.image_dirs)
 
     def __getitem__(self, item):
-        img_name = os.path.join(self.image_dir, self.image_list[item])
-        mask_name = os.path.join(self.mask_dir, self.image_list[item].replace('tomo','pack'))
+        img_name = self.image_dirs[item][0]
+        mask_name = self.image_dirs[item][1]
+        class_label = self.image_dirs[item][2]
+
         with mrc.open(img_name, permissive=True) as f:
             img = f.data  # (32, 32, 32)
         with mrc.open(mask_name, permissive=True) as f:
             mask = f.data  # (32, 32, 32)
         img = np.expand_dims(img,0)
         mask = np.expand_dims(mask, 0)
-        sample = {'image': img, 'mask': mask}
+        class_label = np.expand_dims(class_label, 0)
+        sample = {'image': img, 'mask': mask, 'class':class_label}
         return sample
